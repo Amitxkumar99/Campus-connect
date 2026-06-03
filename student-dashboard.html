@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard | CampusConnect</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+</head>
+<body class="dark dashboard-body">
+
+    <!-- === LEFT SIDEBAR === -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="nav-brand" style="font-size: 1.2rem; margin-bottom: 24px;">
+                <div class="brand-icon" style="width: 24px; height: 24px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2l10 6.5v7L12 22 2 15.5v-7L12 2z"></path>
+                        <path d="M12 22v-6.5"></path>
+                        <path d="M22 8.5l-10 7-10-7"></path>
+                        <path d="M2 15.5l10-7 10 7"></path>
+                    </svg>
+                </div>
+                CampusConnect
+            </div>
+            
+            <div class="sidebar-profile">
+                <div class="avatar" style="background: linear-gradient(135deg, #2563EB, #7C3AED);">S</div>
+                <div class="sidebar-profile-info">
+                    <h4 id="sidebar-user-name">Student User</h4>
+                    <p>B.Tech CSE • 3rd Year</p>
+                </div>
+            </div>
+            
+            <div class="profile-completion">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                    <span>Profile Strength</span>
+                    <span style="color: var(--primary-blue); font-weight: 600;">70%</span>
+                </div>
+                <div class="completion-bar">
+                    <div class="completion-fill"></div>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                Home Feed
+            </a>
+            <a href="discover.html" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                Discover People
+            </a>
+            <a href="jobs.html" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                Jobs & Internships
+            </a>
+            <a href="#" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                My Projects
+            </a>
+            <a href="events.html" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                Events
+            </a>
+            <a href="messaging.html" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                Messages
+            </a>
+            <a href="notifications.html" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                Notifications
+            </a>
+            <a href="#" class="nav-item" style="margin-top: auto;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                Settings
+            </a>
+            <a href="index.html" class="nav-item" style="color: var(--accent-violet);">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                Sign Out
+            </a>
+        </nav>
+    </aside>
+
+    <!-- === MAIN WRAPPER === -->
+    <div class="main-wrapper">
+        
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <button id="mobile-sidebar-toggle" style="background:none; border:none; color:white; font-size: 1.5rem; cursor: pointer; display: none;">☰</button>
+                <div class="search-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" placeholder="Search people, jobs, events...">
+                </div>
+            </div>
+            
+            <div class="topbar-actions">
+                <button class="notification-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    <span class="notification-badge">3</span>
+                </button>
+                <div class="avatar" style="width: 36px; height: 36px; font-size: 0.9rem; cursor: pointer;">S</div>
+            </div>
+        </header>
+
+        <!-- CONTENT AREA -->
+        <div class="content-area">
+            
+            <!-- FEED -->
+            <main class="feed-container">
+                
+                <!-- Composer -->
+                <div class="post-composer">
+                    <div class="composer-input">
+                        <div class="avatar" style="width: 40px; height: 40px;">S</div>
+                        <input type="text" placeholder="Share an update, project win, or ask a question...">
+                    </div>
+                    <div class="composer-actions">
+                        <div class="action-btns">
+                            <button class="action-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                                Media
+                            </button>
+                            <button class="action-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                Project
+                            </button>
+                        </div>
+                        <button class="btn btn-primary" style="padding: 8px 16px;">Post</button>
+                    </div>
+                </div>
+
+                <!-- Feed Card 1 -->
+                <div class="feed-card fade-up">
+                    <div class="feed-header">
+                        <div class="avatar" style="background: var(--success-green);">A</div>
+                        <div class="feed-meta">
+                            <h5>Aman Gupta <span class="role-pill pill-alumni" style="font-size: 0.6rem; padding: 2px 6px; margin-left: 8px;">Alumni</span></h5>
+                            <span>Software Engineer at Google • 2h ago</span>
+                        </div>
+                    </div>
+                    <div class="feed-content">
+                        <p>Hey juniors! My team at Google is actively looking for Summer Interns (2027 batch). We're heavily focusing on candidates with a strong grasp of Data Structures and system design.</p>
+                        <p>If you're from PTU and actively Leetcoding, drop a comment or DM me! I'll be referring 5 students this weekend. 🚀</p>
+                    </div>
+                    <div class="tags" style="margin-bottom: 16px;">
+                        <span class="tag">Internship</span>
+                        <span class="tag">Referral</span>
+                        <span class="tag">DSA</span>
+                    </div>
+                    <div class="feed-actions">
+                        <button class="action-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg> 124</button>
+                        <button class="action-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> 32</button>
+                        <button class="action-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg> Share</button>
+                    </div>
+                </div>
+
+                <!-- Feed Card 2 -->
+                <div class="feed-card fade-up">
+                    <div class="feed-header">
+                        <div class="avatar" style="background: var(--primary-blue);">R</div>
+                        <div class="feed-meta">
+                            <h5>Rahul Dev <span class="role-pill pill-student" style="font-size: 0.6rem; padding: 2px 6px; margin-left: 8px;">Student</span></h5>
+                            <span>B.Tech CSE • 5h ago</span>
+                        </div>
+                    </div>
+                    <div class="feed-content">
+                        <p>Just deployed my first full-stack application using the MERN stack! 🌐 It's a real-time collaborative whiteboard.</p>
+                        <p>Looking for a UI/UX designer from the campus to partner up for the upcoming Smart India Hackathon. Anyone interested?</p>
+                    </div>
+                    <div class="tags" style="margin-bottom: 16px;">
+                        <span class="tag">MERN</span>
+                        <span class="tag">Hackathon</span>
+                        <span class="tag">Looking for Teammate</span>
+                    </div>
+                    <div class="feed-actions">
+                        <button class="action-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg> 45</button>
+                        <button class="action-btn"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> 8</button>
+                    </div>
+                </div>
+
+            </main>
+
+            <!-- RIGHT PANEL -->
+            <aside class="right-panel">
+                
+                <div class="widget fade-up">
+                    <h4>People you may know</h4>
+                    
+                    <div class="suggestion-card">
+                        <div class="avatar" style="width: 40px; height: 40px; font-size: 1rem;">P</div>
+                        <div class="suggestion-info" style="flex: 1;">
+                            <h5>Priya Sharma</h5>
+                            <p>3rd Yr • UI/UX Design</p>
+                        </div>
+                        <button class="btn btn-outline btn-small">Connect</button>
+                    </div>
+                    
+                    <div class="suggestion-card">
+                        <div class="avatar" style="width: 40px; height: 40px; font-size: 1rem; background: var(--accent-violet);">K</div>
+                        <div class="suggestion-info" style="flex: 1;">
+                            <h5>Karan Singh</h5>
+                            <p>4th Yr • React.js</p>
+                        </div>
+                        <button class="btn btn-outline btn-small">Connect</button>
+                    </div>
+
+                    <a href="discover.html" style="font-size: 0.85rem; color: var(--primary-blue); text-decoration: none; display: block; margin-top: 16px; text-align: center;">View all recommendations →</a>
+                </div>
+
+                <div class="widget fade-up" style="animation-delay: 0.1s;">
+                    <h4>Jobs matching your skills</h4>
+                    
+                    <div class="suggestion-card" style="align-items: flex-start;">
+                        <div class="avatar" style="width: 40px; height: 40px; border-radius: 8px; background: white; color: black; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">G</div>
+                        <div class="suggestion-info" style="flex: 1;">
+                            <h5>Frontend Intern</h5>
+                            <p style="color: var(--text-primary); margin-bottom: 4px;">Google • Remote</p>
+                            <p>Skills: React, HTML, CSS</p>
+                            <p style="color: var(--success-green); font-weight: 500; margin-top: 4px;">Posted by Alumni</p>
+                        </div>
+                    </div>
+                    
+                    <div class="suggestion-card" style="align-items: flex-start; border-top: 1px solid var(--border-color); padding-top: 16px;">
+                        <div class="avatar" style="width: 40px; height: 40px; border-radius: 8px; background: #FF4500; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">R</div>
+                        <div class="suggestion-info" style="flex: 1;">
+                            <h5>SDE I</h5>
+                            <p style="color: var(--text-primary); margin-bottom: 4px;">Reddit • Bengaluru</p>
+                            <p>Skills: Python, Node.js</p>
+                        </div>
+                    </div>
+
+                    <a href="jobs.html" class="btn btn-primary btn-small" style="display: block; text-align: center; margin-top: 16px;">View all matching jobs</a>
+                </div>
+
+            </aside>
+
+        </div>
+    </div>
+
+    <!-- Chatbot trigger can go here globally via app.js later -->
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load user profile name from simulated auth state
+            const role = localStorage.getItem('campusConnectRole') || 'student';
+            if(role !== 'student') {
+                // If wrong role accessed, redirect. (For demo purposes we skip strict enforcement)
+                console.log("Logged in as: ", role);
+            }
+            
+            // Mobile sidebar toggle
+            const mobileToggle = document.getElementById('mobile-sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            
+            if (window.innerWidth <= 768) {
+                mobileToggle.style.display = 'block';
+            }
+            
+            window.addEventListener('resize', () => {
+                if (window.innerWidth <= 768) {
+                    mobileToggle.style.display = 'block';
+                } else {
+                    mobileToggle.style.display = 'none';
+                    sidebar.classList.remove('open');
+                }
+            });
+
+            mobileToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+            });
+            
+            // Connect buttons interactive simulation
+            document.querySelectorAll('.suggestion-card .btn-outline').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (this.textContent === 'Connect') {
+                        this.textContent = 'Pending';
+                        this.style.background = 'rgba(255,255,255,0.1)';
+                        this.style.color = 'var(--text-muted)';
+                        this.style.borderColor = 'transparent';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jobs & Internships | CampusConnect</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+</head>
+<body class="dark dashboard-body">
+
+    <!-- === LEFT SIDEBAR === -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="nav-brand" style="font-size: 1.2rem; margin-bottom: 24px;">
+                <div class="brand-icon" style="width: 24px; height: 24px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2l10 6.5v7L12 22 2 15.5v-7L12 2z"></path>
+                        <path d="M12 22v-6.5"></path>
+                        <path d="M22 8.5l-10 7-10-7"></path>
+                        <path d="M2 15.5l10-7 10 7"></path>
+                    </svg>
+                </div>
+                CampusConnect
+            </div>
+            
+            <div class="sidebar-profile">
+                <div class="avatar" style="background: linear-gradient(135deg, #2563EB, #7C3AED);" id="menu-avatar">S</div>
+                <div class="sidebar-profile-info">
+                    <h4 id="sidebar-user-name">Student User</h4>
+                    <p id="sidebar-user-desc">B.Tech CSE • 3rd Year</p>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="student-dashboard.html" class="nav-item" id="nav-home">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                Home Feed
+            </a>
+            <a href="discover.html" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                Discover People
+            </a>
+            <a href="jobs.html" class="nav-item active">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                Jobs & Internships
+            </a>
+            <a href="#" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                My Projects
+            </a>
+            <a href="events.html" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                Events
+            </a>
+            <a href="messaging.html" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                Messages
+            </a>
+            <a href="index.html" class="nav-item" style="margin-top: auto; color: var(--accent-violet);">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                Sign Out
+            </a>
+        </nav>
+    </aside>
+
+    <!-- === MAIN WRAPPER === -->
+    <div class="main-wrapper">
+        
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <button id="mobile-sidebar-toggle" style="background:none; border:none; color:white; font-size: 1.5rem; cursor: pointer; display: none;">☰</button>
+                <div class="search-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" placeholder="Search jobs, skills, companies...">
+                </div>
+            </div>
+            
+            <div class="topbar-actions">
+                <button class="btn btn-primary btn-small" id="post-job-btn" style="display: none;">Post Opportunity</button>
+                <button class="notification-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                </button>
+                <div class="avatar" style="width: 36px; height: 36px; font-size: 0.9rem; cursor: pointer;" id="topbar-avatar">S</div>
+            </div>
+        </header>
+
+        <!-- JOBS CONTENT -->
+        <div class="content-area">
+            <main class="jobs-container w-100" style="flex: 1;">
+                
+                <div class="jobs-header">
+                    <h2>Jobs & Internships</h2>
+                </div>
+
+                <div class="jobs-tabs">
+                    <div class="job-tab active">All Listings</div>
+                    <div class="job-tab">Saved</div>
+                    <div class="job-tab">Applied</div>
+                    <div class="job-tab" id="my-postings-tab" style="display: none;">My Postings</div>
+                </div>
+
+                <div class="jobs-filters">
+                    <div class="filter-btn active">All Roles</div>
+                    <div class="filter-btn">Internships</div>
+                    <div class="filter-btn">Full-time</div>
+                    <div class="filter-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        Remote
+                    </div>
+                    <div class="filter-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                        PTU Preferred
+                    </div>
+                    <div class="filter-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+                        More Filters
+                    </div>
+                </div>
+
+                <div class="jobs-grid">
+                    
+                    <!-- Job Card 1 -->
+                    <div class="job-card fade-up">
+                        <div class="job-card-header">
+                            <div class="company-logo" style="background: linear-gradient(135deg, #10b981, #059669);">G</div>
+                            <div class="job-title-area">
+                                <h3>Frontend Developer Intern</h3>
+                                <p>Google India</p>
+                            </div>
+                        </div>
+                        
+                        <div class="job-meta-grid">
+                            <div class="job-meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path></svg>
+                                Remote
+                            </div>
+                            <div class="job-meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                                6 Months
+                            </div>
+                            <div class="job-meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                ₹40,000 / mo
+                            </div>
+                            <div class="job-meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                Starts June
+                            </div>
+                        </div>
+
+                        <div class="job-tags">
+                            <span class="tag">React</span>
+                            <span class="tag">TypeScript</span>
+                            <span class="tag">CSS</span>
+                        </div>
+
+                        <div class="job-card-footer">
+                            <div class="posted-by">
+                                <div class="avatar" style="width: 24px; height: 24px; font-size: 0.6rem; background: var(--success-green);">A</div>
+                                <span>Posted by Alumni</span>
+                            </div>
+                            <button class="btn btn-outline btn-small apply-btn">Apply Now</button>
+                        </div>
+                    </div>
+
+                    <!-- Job Card 2 -->
+                    <div class="job-card fade-up" style="animation-delay: 0.1s;">
+                        <div class="job-card-header">
+                            <div class="company-logo" style="background: linear-gradient(135deg, #f59e0b, #d97706);">S</div>
+                            <div class="job-title-area">
+                                <h3>Product Design Intern</h3>
+                                <p>Swiggy</p>
+                            </div>
+                        </div>
+                        
+                        <div class="job-meta-grid">
+                            <div class="job-meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path></svg>
+                                Bengaluru
+                            </div>
+                            <div class="job-meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                                3 Months
+                            </div>
+                            <div class="job-meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                ₹25,000 / mo
+                            </div>
+                            <div class="job-meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                5 Openings
+                            </div>
+                        </div>
+
+                        <div class="job-tags">
+                            <span class="tag">Figma</span>
+                            <span class="tag">UI/UX</span>
+                            <span class="tag">Prototyping</span>
+                        </div>
+
+                        <div class="job-card-footer">
+                            <div class="posted-by">
+                                <div class="avatar" style="width: 24px; height: 24px; font-size: 0.6rem; background: var(--accent-violet);">R</div>
+                                <span>Posted by Recruiter</span>
+                            </div>
+                            <button class="btn btn-outline btn-small apply-btn">Apply Now</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Job Card 3 -->
+                    <div class="job-card fade-up" style="animation-delay: 0.2s;">
+                        <div class="job-card-header">
+                            <div class="company-logo" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">P</div>
+                            <div class="job-title-area">
+                                <h3>Backend Developer (Full-time)</h3>
+                                <p>Paytm</p>
+                            </div>
+                        </div>
+                        
+                        <div class="job-meta-grid">
+                            <div class="job-meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path></svg>
+                                Noida / Hybrid
+                            </div>
+                            <div class="job-meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                                Full-time
+                            </div>
+                            <div class="job-meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                12-15 LPA
+                            </div>
+                        </div>
+
+                        <div class="job-tags">
+                            <span class="tag">Node.js</span>
+                            <span class="tag">MongoDB</span>
+                            <span class="tag">AWS</span>
+                        </div>
+
+                        <div class="job-card-footer">
+                            <div class="posted-by">
+                                <div class="avatar" style="width: 24px; height: 24px; font-size: 0.6rem; background: var(--accent-violet);">R</div>
+                                <span>Posted by Recruiter</span>
+                            </div>
+                            <button class="btn btn-outline btn-small apply-btn">Apply Now</button>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Application Modal (Hidden by default) -->
+    <div class="auth-modal-overlay" id="apply-modal">
+        <div class="auth-modal" style="max-width: 500px;">
+            <button class="close-modal" id="close-apply-modal">&times;</button>
+            <h3 style="margin-bottom: 24px;">Apply for <span class="text-gradient" id="apply-role-name">Role</span></h3>
+            <form id="apply-form">
+                <div class="auth-form-group">
+                    <label>Resume</label>
+                    <div style="border: 1px dashed var(--border-color); padding: 24px; text-align: center; border-radius: 8px; cursor: pointer; background: rgba(255,255,255,0.02);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom: 8px; color: var(--primary-blue);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Click to upload or drag and drop</p>
+                        <p style="margin: 4px 0 0 0; color: var(--text-muted); font-size: 0.8rem;">PDF up to 5MB</p>
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label>Cover Note (Optional)</label>
+                    <textarea placeholder="Why are you a good fit for this role?" style="width: 100%; height: 100px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; color: white; resize: none;"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Application</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const role = localStorage.getItem('campusConnectRole') || 'student';
+            
+            // Adjust UI based on detected role
+            const sidebarName = document.getElementById('sidebar-user-name');
+            const sidebarDesc = document.getElementById('sidebar-user-desc');
+            const menuAvatar = document.getElementById('menu-avatar');
+            const topbarAvatar = document.getElementById('topbar-avatar');
+            const navHome = document.getElementById('nav-home');
+            
+            if (role === 'alumni') {
+                sidebarName.textContent = 'Alumni User';
+                sidebarDesc.textContent = 'Software Engineer @ Tech';
+                menuAvatar.style.background = 'var(--success-green)';
+                topbarAvatar.style.background = 'var(--success-green)';
+                navHome.href = 'alumni-dashboard.html';
+                document.getElementById('post-job-btn').style.display = 'block';
+                document.getElementById('my-postings-tab').style.display = 'block';
+            } else if (role === 'recruiter') {
+                sidebarName.textContent = 'Recruiter User';
+                sidebarDesc.textContent = 'HR @ Company';
+                menuAvatar.style.background = 'var(--accent-violet)';
+                topbarAvatar.style.background = 'var(--accent-violet)';
+                navHome.href = 'recruiter-dashboard.html';
+                document.getElementById('post-job-btn').style.display = 'block';
+                document.getElementById('my-postings-tab').style.display = 'block';
+            } else {
+                sidebarName.textContent = 'Student User';
+                sidebarDesc.textContent = 'B.Tech CSE • 3rd Year';
+                navHome.href = 'student-dashboard.html';
+            }
+
+            // Mobile sidebar toggle
+            const mobileToggle = document.getElementById('mobile-sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            
+            if (window.innerWidth <= 768) mobileToggle.style.display = 'block';
+            
+            mobileToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+            });
+
+            // Tabs toggle
+            document.querySelectorAll('.job-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.job-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                });
+            });
+
+            // Filter toggle
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.classList.toggle('active');
+                });
+            });
+
+            // Apply Modal Logic
+            const applyModal = document.getElementById('apply-modal');
+            const closeApplyModal = document.getElementById('close-apply-modal');
+            const applyForm = document.getElementById('apply-form');
+            const applyRoleName = document.getElementById('apply-role-name');
+
+            document.querySelectorAll('.apply-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    if(role !== 'student') {
+                        alert("Only students can apply to jobs!");
+                        return;
+                    }
+                    const title = e.target.closest('.job-card').querySelector('h3').textContent;
+                    applyRoleName.textContent = title;
+                    applyModal.classList.add('open');
+                });
+            });
+
+            closeApplyModal.addEventListener('click', () => applyModal.classList.remove('open'));
+            
+            applyForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Application submitted successfully!');
+                applyModal.classList.remove('open');
+                // Could update UI button to "Applied" here
+            });
+        });
+    </script>
+</body>
+</html>

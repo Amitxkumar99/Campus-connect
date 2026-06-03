@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In | CampusConnect</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .login-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            max-width: 440px;
+            margin: 0 auto;
+        }
+
+        .role-badge-container {
+            height: 30px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .role-pill {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .role-pill.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pill-student { background: #2563EB; color: white; }
+        .pill-alumni { background: #10B981; color: white; }
+        .pill-recruiter { background: #7C3AED; color: white; }
+
+        .forgot-password {
+            font-size: 0.9rem;
+            color: var(--primary-blue);
+            text-decoration: none;
+            display: block;
+            margin-top: 8px;
+            text-align: right;
+        }
+        
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+</head>
+<body class="dark auth-page">
+
+    <!-- === NAVBAR === -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <div class="brand-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2l10 6.5v7L12 22 2 15.5v-7L12 2z"></path>
+                        <path d="M12 22v-6.5"></path>
+                        <path d="M22 8.5l-10 7-10-7"></path>
+                        <path d="M2 15.5l10-7 10 7"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </div>
+                CampusConnect
+            </div>
+            <div class="nav-links">
+                <a href="index.html" style="color: var(--text-secondary);">Back to Home</a>
+                <a href="signup.html" class="btn btn-outline" style="padding: 8px 16px;">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- === LOGIN CONTAINER === -->
+    <main class="auth-container">
+        
+        <div class="auth-step">
+            <div class="auth-header text-center" style="margin-bottom: 24px;">
+                <h2>Welcome <span class="text-gradient">Back</span></h2>
+                <p>Log in to access your dashboard.</p>
+            </div>
+            
+            <div class="login-card">
+                
+                <div class="role-badge-container">
+                    <span class="role-pill" id="detected-role-badge">Student</span>
+                </div>
+
+                <form id="login-form">
+                    <div class="auth-form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="login-email" placeholder="you@example.com" required autofocus>
+                    </div>
+                    <div class="auth-form-group">
+                        <label>Password</label>
+                        <input type="password" placeholder="••••••••" required>
+                        <a href="#" class="forgot-password">Forgot password?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 16px;">Log In</button>
+                </form>
+
+                <div class="text-center" style="margin-top: 24px;">
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                        Don't have an account? <a href="signup.html" style="color: var(--primary-blue); font-weight: 500;">Sign up</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const emailInput = document.getElementById('login-email');
+            const roleBadge = document.getElementById('detected-role-badge');
+            const loginForm = document.getElementById('login-form');
+            
+            let detectedRole = 'student'; // Default fallback
+
+            // Simple mock logic to detect role based on email input
+            emailInput.addEventListener('input', (e) => {
+                const val = e.target.value.toLowerCase();
+                
+                if (val.length < 5) {
+                    roleBadge.className = 'role-pill';
+                    return;
+                }
+
+                if (val.includes('.edu') || val.includes('.ac.in')) {
+                    detectedRole = 'student';
+                    roleBadge.textContent = 'Student Account';
+                    roleBadge.className = 'role-pill visible pill-student';
+                } else if (val.includes('recruiter') || val.includes('hr@') || val.includes('careers@')) {
+                    detectedRole = 'recruiter';
+                    roleBadge.textContent = 'Recruiter Account';
+                    roleBadge.className = 'role-pill visible pill-recruiter';
+                } else {
+                    // Default to alumni for general emails if not clearly a student/recruiter
+                    detectedRole = 'alumni';
+                    roleBadge.textContent = 'Alumni Account';
+                    roleBadge.className = 'role-pill visible pill-alumni';
+                }
+            });
+
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Save role to localStorage to simulate auth state
+                localStorage.setItem('campusConnectRole', detectedRole);
+                
+                // Redirect to dashboard
+                window.location.href = `${detectedRole}-dashboard.html`;
+            });
+            
+            // Check if we came from signup and prefill role/email logic if needed
+            // For now, it works entirely via the dynamic detection above.
+        });
+    </script>
+</body>
+</html>

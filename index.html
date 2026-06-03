@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusConnect | Connect, Collaborate, Grow</title>
+    <meta name="description" content="Connect, Collaborate, and Grow Together on Campus with CampusConnect.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+</head>
+<body class="dark">
+
+    <!-- === NAVBAR === -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="brand">
+                <div class="brand-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="url(#logoGradient)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <defs>
+                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#2563EB" />
+                                <stop offset="100%" stop-color="#7C3AED" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="18" cy="5" r="3"></circle>
+                        <circle cx="6" cy="12" r="3"></circle>
+                        <circle cx="18" cy="19" r="3"></circle>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                    </svg>
+                </div>
+                <span class="brand-text">Campus<span class="text-gradient">Connect</span></span>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#features" class="nav-link">Features</a></li>
+                <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+                <li><a href="#testimonials" class="nav-link">Testimonials</a></li>
+            </ul>
+            
+            <div class="nav-right">
+                <!-- Theme toggle removed - enforced dark mode -->
+                <a href="login.html" class="btn btn-outline" style="border: none; padding: 12px 16px;">Sign In</a>
+                <a href="signup.html" class="btn btn-primary">Get Started</a>
+                <div id="user-profile" style="display: none; align-items: center; gap: 10px; cursor: pointer;">
+                    <div class="avatar" id="user-avatar" style="width: 40px; height: 40px; font-size: 1rem;">U</div>
+                    <span id="user-name-display" style="font-weight: 500;" class="desktop-only">User</span>
+                </div>
+                <button class="menu-toggle" id="menu-toggle">☰</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+        <div class="mobile-links">
+            <a href="#home">Home</a>
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#testimonials">Testimonials</a>
+            <a href="login.html" style="text-align: center; color: var(--text-secondary); padding: 10px;">Sign In</a>
+            <a href="signup.html" class="btn btn-primary" style="text-align: center;">Get Started</a>
+        </div>
+    </div>
+
+    <!-- === HERO === -->
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <div class="hero-blob blob-1"></div>
+            <div class="hero-blob blob-2"></div>
+        </div>
+        
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text fade-up">
+                    <div class="badge">🎓 Built for the PTU ecosystem</div>
+                    <h1>Connect. Collaborate. <span class="text-gradient">Grow Together</span> on Campus.</h1>
+                    <p>Build meaningful professional connections and find collaboration opportunities within and across campuses, so you never miss a career-defining moment.</p>
+                    
+                    <div class="hero-btns">
+                        <a href="signup.html" class="btn btn-primary">Join Free Today</a>
+                        <a href="#how-it-works" class="btn btn-outline">See How It Works</a>
+                    </div>
+                    
+                    <div class="hero-stats" style="gap: 30px;">
+                        <div class="stat-item">
+                            <h4 style="font-size: 1.1rem; margin-bottom: 4px;">✅ 100%</h4>
+                            <p>Student Verified</p>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <h4 style="font-size: 1.1rem; margin-bottom: 4px;">🎉 Local</h4>
+                            <p>Campus Events</p>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <h4 style="font-size: 1.1rem; margin-bottom: 4px;">💬 Direct</h4>
+                            <p>Peer Messaging</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Removed floating badges from hero section -->
+            </div>
+        </div>
+    </section>
+
+    <!-- === FEATURES === -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header fade-up">
+                <h2>Everything You Need to Build Your <span class="text-gradient">Campus Network</span></h2>
+                <p>Powerful tools designed specifically for college students to maximize their campus experience and future career opportunities.</p>
+            </div>
+            
+            <div class="features-grid">
+                <!-- Feature 1 -->
+                <div class="feature-card fade-up delay-100">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <h3>Smart Profile Matching</h3>
+                    <p>Filter by specific branches, semesters, or even specific subjects to form the perfect study groups or project teams.</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="feature-card fade-up delay-200">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                        </svg>
+                    </div>
+                    <h3>Internship Board</h3>
+                    <p>Exclusive campus-only opportunities posted by alumni and verified startup partners.</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="feature-card fade-up delay-300">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><path d="M13 6h3a2 2 0 0 1 2 2v7"></path><line x1="6" y1="9" x2="6" y2="21"></line>
+                        </svg>
+                    </div>
+                    <h3>Project Collaboration</h3>
+                    <p>Find dedicated partners for your final-year major projects or mid-semester hackathons effortlessly.</p>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="feature-card fade-up delay-100">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </div>
+                    <h3>Campus Events</h3>
+                    <p>Your go-to place for upcoming hostel nights, sports days, and hyper-local college fests like Sell-O-Mania.</p>
+                </div>
+                
+                <!-- Feature 5 -->
+                <div class="feature-card fade-up delay-200">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3>Real-time Messaging</h3>
+                    <p>Secure, encrypted DMs and group chats specifically for your college community circles.</p>
+                </div>
+                
+                <!-- Feature 6 -->
+                <div class="feature-card fade-up delay-300">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Achievement Showcase</h3>
+                    <p>Display your certifications, projects, and hackathon wins beautifully on your public profile.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- === HOW IT WORKS === -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header fade-up">
+                <h2>Get Started in <span class="text-gradient">3 Simple Steps</span></h2>
+                <p>Join the community and start building your network in less than two minutes.</p>
+            </div>
+            
+            <div class="steps-container">
+                <div class="steps-line"></div>
+                
+                <div class="step fade-up delay-100">
+                    <div class="step-number">1</div>
+                    <h3>Create Your Profile</h3>
+                    <p>Sign up with your college email, add your skills, interests, and long-term career goals.</p>
+                </div>
+                
+                <div class="step fade-up delay-200">
+                    <div class="step-number">2</div>
+                    <h3>Discover Your Network</h3>
+                    <p>Browse peers, mentors, and alumni. Filter by branch, year, or specific technical skills.</p>
+                </div>
+                
+                <div class="step fade-up delay-300">
+                    <div class="step-number">3</div>
+                    <h3>Collaborate & Grow</h3>
+                    <p>Join active projects, attend exclusive events, and land internships — all in one place.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- === TESTIMONIALS === -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-header fade-up">
+                <h2>What <span class="text-gradient">Students Are Saying</span></h2>
+                <p>Don't just take our word for it. See how CampusConnect is changing the college experience.</p>
+            </div>
+            
+            <div class="testimonials-grid">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card fade-up delay-100">
+                    <div class="stars">★★★★★</div>
+                    <p class="quote">"Found my startup co-founder through CampusConnect within a week. This platform changed everything for me. The matching algorithm is spot on."</p>
+                    <div class="author">
+                        <div class="avatar" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);">PS</div>
+                        <div class="user-details">
+                            <h5>Priya Sharma</h5>
+                            <p>IIT Delhi, Final Year</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card fade-up delay-200">
+                    <div class="stars">★★★★★</div>
+                    <p class="quote">"Got my first internship through the alumni board here. The network is incredibly active and supportive. Highly recommend to freshers."</p>
+                    <div class="author">
+                        <div class="avatar" style="background: linear-gradient(135deg, #3b82f6, #14b8a6);">AM</div>
+                        <div class="user-details">
+                            <h5>Arjun Mehta</h5>
+                            <p>BITS Pilani, 3rd Year</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card fade-up delay-300">
+                    <div class="stars">★★★★★</div>
+                    <p class="quote">"I was struggling to find teammates for my hackathon. Within 24 hours of posting on CampusConnect, I had a full team. Absolutely brilliant."</p>
+                    <div class="author">
+                        <div class="avatar" style="background: linear-gradient(135deg, #f59e0b, #ea580c);">SR</div>
+                        <div class="user-details">
+                            <h5>Sneha Rao</h5>
+                            <p>VIT Vellore, 2nd Year</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; width: 100%;" class="fade-up">
+                <button class="feedback-trigger" id="open-feedback-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                    </svg>
+                    Leave Feedback
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- === CTA SECTION === -->
+    <section class="cta-section" id="join">
+        <div class="cta-bg">
+            <div class="cta-blob"></div>
+        </div>
+        <div class="container fade-up">
+            <h2>Ready to Build Your <span class="text-gradient">Future?</span></h2>
+            <p>Join the waitlist and be the first to experience the exclusive PTU network.</p>
+            <a href="signup.html" class="btn btn-primary pulse-btn" style="font-size: 1.2rem; padding: 16px 40px; display: inline-block;">Create Your Free Account →</a>
+            <span class="cta-subtext">No credit card required • College email verified • Free forever</span>
+        </div>
+    </section>
+
+    <!-- === FOOTER === -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="brand footer-brand">
+                        <div class="brand-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="url(#logoGradientFooter)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <defs>
+                                    <linearGradient id="logoGradientFooter" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#2563EB" />
+                                        <stop offset="100%" stop-color="#7C3AED" />
+                                    </linearGradient>
+                                </defs>
+                                <circle cx="18" cy="5" r="3"></circle>
+                                <circle cx="6" cy="12" r="3"></circle>
+                                <circle cx="18" cy="19" r="3"></circle>
+                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                            </svg>
+                        </div>
+                        <span class="brand-text" style="font-weight: 700;">Campus<span class="text-gradient">Connect</span></span>
+                    </div>
+                    <p class="footer-desc">Empowering the next generation of innovators, creators, and leaders to connect and build together.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" aria-label="Twitter">𝕏</a>
+                        <a href="#" class="social-icon" aria-label="LinkedIn">in</a>
+                        <a href="#" class="social-icon" aria-label="Instagram">IG</a>
+                        <a href="#" class="social-icon" aria-label="GitHub">GH</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4>Platform</h4>
+                    <ul class="footer-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                        <li><a href="#">Pricing</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Press Kit</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4>Stay Updated</h4>
+                    <p style="margin-bottom: 16px; font-size: 0.95rem;">Join our newsletter for the latest opportunities.</p>
+                    <form class="newsletter-form" onsubmit="event.preventDefault();">
+                        <input type="email" placeholder="Enter your email" class="newsletter-input" required>
+                        <button type="submit" class="newsletter-btn">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 CampusConnect. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth pages are now separate (signup.html, login.html) -->
+
+    <!-- === FEEDBACK === -->
+
+    <div class="auth-modal-overlay" id="feedback-modal">
+        <div class="auth-modal">
+            <button class="close-modal" id="close-feedback-btn">&times;</button>
+            <h3 style="margin-bottom: 8px;">Your <span class="text-gradient">Feedback</span></h3>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 24px; font-size: 0.9rem;">Help us improve CampusConnect.</p>
+            <form id="feedback-form">
+                <div class="auth-form-group">
+                    <label for="fb-name">Full Name</label>
+                    <input type="text" id="fb-name" placeholder="John Doe" required>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div class="auth-form-group">
+                        <label for="fb-course">Course</label>
+                        <input type="text" id="fb-course" placeholder="B.Tech" required>
+                    </div>
+                    <div class="auth-form-group">
+                        <label for="fb-branch">Branch</label>
+                        <input type="text" id="fb-branch" placeholder="CSE" required>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div class="auth-form-group">
+                        <label for="fb-sem">Semester</label>
+                        <input type="text" id="fb-sem" placeholder="6th" required>
+                    </div>
+                    <div class="auth-form-group">
+                        <label for="feedback-type">Category</label>
+                        <select id="feedback-type" class="feedback-input" style="padding-top: 11px; padding-bottom: 11px; margin-bottom: 0;">
+                            <option value="suggestion">Suggestion</option>
+                            <option value="bug">Bug Report</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label for="feedback-text">Details</label>
+                    <textarea id="feedback-text" class="feedback-input" placeholder="Tell us what you think..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 8px; padding: 12px;">Submit Feedback</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- === CHAT WIDGET === -->
+    <button class="chat-toggle" id="chat-toggle" aria-label="Open Chat">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+    </button>
+
+    <div class="chat-widget" id="chat-widget">
+        <div class="chat-header">
+            <div class="chat-avatar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                    <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                </svg>
+            </div>
+            <div>
+                <div class="chat-title">CampusConnect</div>
+                <div class="chat-status"><span class="status-dot"></span> Online</div>
+            </div>
+            <button id="close-chat" style="margin-left: auto; background: none; border: none; color: var(--text-secondary); cursor: pointer;" aria-label="Close Chat">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        
+        <div class="chat-body" id="chat-body" role="log" aria-live="polite">
+            <!-- Messages go here -->
+        </div>
+
+        <div class="chat-chips" id="chat-chips">
+            <button class="chat-chip">Find teammates</button>
+            <button class="chat-chip">Internships</button>
+            <button class="chat-chip">Sign up</button>
+            <button class="chat-chip">Features</button>
+        </div>
+
+        <div class="chat-input-row">
+            <input type="text" class="chat-input" id="chat-input" placeholder="Ask me anything..." aria-label="Chat input">
+            <button class="chat-send" id="chat-send" aria-label="Send message">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- === JAVASCRIPT === -->
+    <script src="app.js"></script>
+</body>
+</html>

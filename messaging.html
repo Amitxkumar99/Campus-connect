@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages | CampusConnect</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+</head>
+<body class="dark dashboard-body">
+
+    <!-- === LEFT SIDEBAR === -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="nav-brand" style="font-size: 1.2rem; margin-bottom: 24px;">
+                <div class="brand-icon" style="width: 24px; height: 24px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l10 6.5v7L12 22 2 15.5v-7L12 2z"></path><path d="M12 22v-6.5"></path><path d="M22 8.5l-10 7-10-7"></path><path d="M2 15.5l10-7 10 7"></path></svg>
+                </div>
+                CampusConnect
+            </div>
+            
+            <div class="sidebar-profile">
+                <div class="avatar" style="background: linear-gradient(135deg, #2563EB, #7C3AED);" id="menu-avatar">S</div>
+                <div class="sidebar-profile-info">
+                    <h4 id="sidebar-user-name">Student User</h4>
+                    <p id="sidebar-user-desc">B.Tech CSE • 3rd Year</p>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="student-dashboard.html" class="nav-item" id="nav-home">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                Home Feed
+            </a>
+            <a href="discover.html" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                Discover People
+            </a>
+            <a href="jobs.html" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                Jobs & Internships
+            </a>
+            <a href="events.html" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                Events
+            </a>
+            <a href="messaging.html" class="nav-item active">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                Messages
+            </a>
+            <a href="notifications.html" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                Notifications
+            </a>
+            <a href="settings.html" class="nav-item" style="margin-top: auto;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                Settings
+            </a>
+        </nav>
+    </aside>
+
+    <!-- === MAIN WRAPPER === -->
+    <div class="main-wrapper">
+        <header class="topbar">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <button id="mobile-sidebar-toggle" style="background:none; border:none; color:white; font-size: 1.5rem; cursor: pointer; display: none;">☰</button>
+                <div class="search-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" placeholder="Search people...">
+                </div>
+            </div>
+            
+            <div class="topbar-actions">
+                <button class="notification-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                </button>
+                <div class="avatar" style="width: 36px; height: 36px; font-size: 0.9rem;" id="topbar-avatar">S</div>
+            </div>
+        </header>
+
+        <div class="messaging-container">
+            <!-- CHAT SIDEBAR -->
+            <div class="chat-sidebar">
+                <div class="chat-sidebar-header">
+                    <h3 style="margin: 0;">Messages</h3>
+                    <input type="text" class="chat-search" placeholder="Search messages...">
+                </div>
+                <div class="chat-list">
+                    
+                    <div class="chat-list-item active">
+                        <div class="avatar" style="width: 48px; height: 48px; background: var(--success-green); flex-shrink: 0;">A</div>
+                        <div class="chat-list-info">
+                            <h5>Aman Gupta <span class="chat-time">2m ago</span></h5>
+                            <p style="color: var(--text-primary); font-weight: 500;">Can you send me your resume?</p>
+                        </div>
+                    </div>
+
+                    <div class="chat-list-item">
+                        <div class="avatar" style="width: 48px; height: 48px; background: var(--primary-blue); flex-shrink: 0;">R</div>
+                        <div class="chat-list-info">
+                            <h5>Rahul Dev <span class="chat-time">2h ago</span></h5>
+                            <p>Awesome! Let's team up for the hackathon.</p>
+                        </div>
+                    </div>
+
+                    <div class="chat-list-item">
+                        <div class="avatar" style="width: 48px; height: 48px; background: var(--accent-violet); flex-shrink: 0;">S</div>
+                        <div class="chat-list-info">
+                            <h5>Sneha K. <span class="chat-time">Yesterday</span></h5>
+                            <p>Thanks for the help with React!</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- CHAT MAIN AREA -->
+            <div class="chat-main">
+                <div class="chat-main-header">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div class="avatar" style="width: 40px; height: 40px; background: var(--success-green);">A</div>
+                        <div>
+                            <h4 style="margin: 0; display: flex; align-items: center; gap: 8px;">Aman Gupta <span class="role-pill pill-alumni" style="font-size: 0.6rem; padding: 2px 6px;">Alumni</span></h4>
+                            <span style="font-size: 0.8rem; color: var(--success-green);">Online</span>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="action-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button>
+                    </div>
+                </div>
+
+                <div class="chat-main-body" id="chat-messages">
+                    
+                    <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin: 16px 0;">Today</div>
+
+                    <div class="msg-bubble msg-sent">
+                        Hi Aman! Thanks for connecting. I saw your post about the Google internships.
+                    </div>
+
+                    <div class="msg-bubble msg-received">
+                        Hey there! Yes, my team is actively looking for 2027 grads. Your profile looks solid.
+                    </div>
+
+                    <div class="msg-bubble msg-sent">
+                        I would love to be considered. I have been actively doing DSA and built a few full-stack projects.
+                    </div>
+
+                    <div class="msg-bubble msg-received">
+                        That's perfect. Can you send me your resume?
+                    </div>
+
+                </div>
+
+                <div class="chat-main-footer">
+                    <button class="action-btn" style="color: var(--text-secondary);"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg></button>
+                    <input type="text" class="chat-input-full" placeholder="Type a message..." id="message-input">
+                    <button class="btn btn-primary" style="padding: 12px 16px; border-radius: 24px;" id="send-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const role = localStorage.getItem('campusConnectRole') || 'student';
+            const navHome = document.getElementById('nav-home');
+            const menuAvatar = document.getElementById('menu-avatar');
+            const topbarAvatar = document.getElementById('topbar-avatar');
+            
+            if (role === 'alumni') {
+                navHome.href = 'alumni-dashboard.html';
+                menuAvatar.style.background = 'var(--success-green)';
+                topbarAvatar.style.background = 'var(--success-green)';
+                menuAvatar.textContent = 'A';
+                topbarAvatar.textContent = 'A';
+                document.getElementById('sidebar-user-name').textContent = 'Alumni User';
+                document.getElementById('sidebar-user-desc').textContent = 'Software Engineer @ Tech';
+            } else if (role === 'recruiter') {
+                navHome.href = 'recruiter-dashboard.html';
+                menuAvatar.style.background = 'var(--accent-violet)';
+                topbarAvatar.style.background = 'var(--accent-violet)';
+                menuAvatar.textContent = 'R';
+                topbarAvatar.textContent = 'R';
+                document.getElementById('sidebar-user-name').textContent = 'Recruiter User';
+                document.getElementById('sidebar-user-desc').textContent = 'HR @ Company';
+            }
+
+            const mobileToggle = document.getElementById('mobile-sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth <= 768) mobileToggle.style.display = 'block';
+            mobileToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
+
+            // Send Message Simulation
+            const input = document.getElementById('message-input');
+            const sendBtn = document.getElementById('send-btn');
+            const messagesArea = document.getElementById('chat-messages');
+
+            function sendMessage() {
+                if(!input.value.trim()) return;
+                
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'msg-bubble msg-sent fade-up visible';
+                msgDiv.textContent = input.value;
+                messagesArea.appendChild(msgDiv);
+                
+                input.value = '';
+                messagesArea.scrollTop = messagesArea.scrollHeight;
+
+                setTimeout(() => {
+                    const reply = document.createElement('div');
+                    reply.className = 'msg-bubble msg-received fade-up visible';
+                    reply.textContent = "Great, got it!";
+                    messagesArea.appendChild(reply);
+                    messagesArea.scrollTop = messagesArea.scrollHeight;
+                }, 1000);
+            }
+
+            sendBtn.addEventListener('click', sendMessage);
+            input.addEventListener('keypress', (e) => {
+                if(e.key === 'Enter') sendMessage();
+            });
+        });
+    </script>
+</body>
+</html>

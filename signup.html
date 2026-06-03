@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | CampusConnect</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+</head>
+<body class="dark auth-page">
+
+    <!-- === NAVBAR === -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <div class="brand-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2l10 6.5v7L12 22 2 15.5v-7L12 2z"></path>
+                        <path d="M12 22v-6.5"></path>
+                        <path d="M22 8.5l-10 7-10-7"></path>
+                        <path d="M2 15.5l10-7 10 7"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </div>
+                CampusConnect
+            </div>
+            <div class="nav-links">
+                <a href="index.html" style="color: var(--text-secondary);">Back to Home</a>
+                <a href="login.html" class="btn btn-outline" style="padding: 8px 16px;">Log In</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- === SIGNUP FLOW CONTAINER === -->
+    <main class="auth-container">
+        
+        <!-- STEP 1: ROLE SELECTION -->
+        <div id="step-1" class="auth-step active">
+            <div class="auth-header text-center">
+                <h2>Who are you on <span class="text-gradient">CampusConnect?</span></h2>
+                <p>Select your role to personalize your experience.</p>
+            </div>
+            
+            <div class="role-selection-grid">
+                <!-- Student Card -->
+                <div class="role-card" data-role="student">
+                    <div class="role-icon blue-glow">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    </div>
+                    <h3>Student</h3>
+                    <p>I'm looking for opportunities and connections.</p>
+                    <div class="role-check">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                </div>
+
+                <!-- Alumni Card -->
+                <div class="role-card" data-role="alumni">
+                    <div class="role-icon green-glow">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    </div>
+                    <h3>Alumni</h3>
+                    <p>I want to give back and stay connected.</p>
+                    <div class="role-check">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                </div>
+
+                <!-- Recruiter Card -->
+                <div class="role-card" data-role="recruiter">
+                    <div class="role-icon purple-glow">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                    </div>
+                    <h3>Recruiter</h3>
+                    <p>I'm hiring and sourcing campus talent.</p>
+                    <div class="role-check">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center" style="margin-top: 40px;">
+                <button class="btn btn-primary btn-lg" id="btn-continue-step1" disabled>Continue</button>
+            </div>
+        </div>
+
+        <!-- STEP 2: ROLE FORMS -->
+        <div id="step-2" class="auth-step hidden">
+            <div class="auth-header text-center">
+                <h2>Create your <span class="text-gradient" id="dynamic-role-name">Account</span></h2>
+                <p>Fill in your details to get started.</p>
+            </div>
+            
+            <div class="auth-card">
+                <!-- STUDENT FORM -->
+                <form id="form-student" class="role-form hidden">
+                    <div class="auth-form-group">
+                        <label>Full Name</label>
+                        <input type="text" placeholder="John Doe" required>
+                    </div>
+                    <div class="auth-form-group">
+                        <label>College Email <span class="badge-verified">Requires Verification</span></label>
+                        <input type="email" placeholder="john.doe@ptu.ac.in" required>
+                    </div>
+                    <div class="auth-form-row">
+                        <div class="auth-form-group">
+                            <label>College / University</label>
+                            <input type="text" placeholder="e.g. PTU" required>
+                        </div>
+                        <div class="auth-form-group">
+                            <label>Current Year</label>
+                            <select required>
+                                <option value="" disabled selected>Select Year</option>
+                                <option value="1">1st Year</option>
+                                <option value="2">2nd Year</option>
+                                <option value="3">3rd Year</option>
+                                <option value="4">4th Year</option>
+                                <option value="5">Postgrad</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="auth-form-group">
+                        <label>Branch / Department</label>
+                        <input type="text" placeholder="e.g. Computer Science" required>
+                    </div>
+                    <div class="auth-form-group">
+                        <label>Top Skills (comma separated)</label>
+                        <input type="text" placeholder="Python, React, UI/UX" required>
+                    </div>
+                    <div class="auth-form-row">
+                        <div class="auth-form-group">
+                            <label>Password</label>
+                            <input type="password" placeholder="••••••••" required>
+                        </div>
+                        <div class="auth-form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" placeholder="••••••••" required>
+                        </div>
+                    </div>
+                    <div class="auth-form-checkbox">
+                        <input type="checkbox" id="terms-student" required>
+                        <label for="terms-student">I agree to the Terms of Service and Privacy Policy</label>
+                    </div>
+                </form>
+
+                <!-- ALUMNI FORM -->
+                <form id="form-alumni" class="role-form hidden">
+                    <div class="auth-form-group">
+                        <label>Full Name</label>
+                        <input type="text" placeholder="Jane Smith" required>
+                    </div>
+                    <div class="auth-form-group">
+                        <label>Email Address</label>
+                        <input type="email" placeholder="jane@example.com" required>
+                    </div>
+                    <div class="auth-form-row">
+                        <div class="auth-form-group">
+                            <label>Graduated College</label>
+                            <input type="text" placeholder="e.g. PTU" required>
+                        </div>
+                        <div class="auth-form-group">
+                            <label>Graduation Year</label>
+                            <input type="number" placeholder="2022" required>
+                        </div>
+                    </div>
+                    <div class="auth-form-row">
+                        <div class="auth-form-group">
+                            <label>Current Company</label>
+                            <input type="text" placeholder="e.g. Google" required>
+                        </div>
+                        <div class="auth-form-group">
+                            <label>Designation</label>
+                            <input type="text" placeholder="Software Engineer" required>
+                        </div>
+                    </div>
+                    <div class="auth-form-group">
+                        <label>Industry</label>
+                        <select required>
+                            <option value="" disabled selected>Select Industry</option>
+                            <option value="tech">Technology / IT</option>
+                            <option value="finance">Finance / Banking</option>
+                            <option value="marketing">Marketing / PR</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="auth-form-group">
+                        <label>LinkedIn URL (Optional)</label>
+                        <input type="url" placeholder="https://linkedin.com/in/janesmith">
+                    </div>
+                    <div class="auth-form-toggle">
+                        <label>Are you open to mentoring students?</label>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="auth-form-group">
+                        <label>Password</label>
+                        <input type="password" placeholder="••••••••" required>
+                    </div>
+                </form>
+
+                <!-- RECRUITER FORM -->
+                <form id="form-recruiter" class="role-form hidden">
+                    <div class="auth-form-group">
+                        <label>Full Name</label>
+                        <input type="text" placeholder="Michael Scott" required>
+                    </div>
+                    <div class="auth-form-group">
+                        <label>Work Email</label>
+                        <input type="email" placeholder="michael@dundermifflin.com" required>
+                    </div>
+                    <div class="auth-form-row">
+                        <div class="auth-form-group">
+                            <label>Company Name</label>
+                            <input type="text" placeholder="Dunder Mifflin" required>
+                        </div>
+                        <div class="auth-form-group">
+                            <label>Company Size</label>
+                            <select required>
+                                <option value="" disabled selected>Select Size</option>
+                                <option value="startup">Startup (1-50)</option>
+                                <option value="sme">SME (51-500)</option>
+                                <option value="enterprise">Enterprise (500+)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="auth-form-row">
+                        <div class="auth-form-group">
+                            <label>Industry</label>
+                            <input type="text" placeholder="Paper Distribution" required>
+                        </div>
+                        <div class="auth-form-group">
+                            <label>Your Designation</label>
+                            <input type="text" placeholder="Regional Manager" required>
+                        </div>
+                    </div>
+                    <div class="auth-form-toggle">
+                        <label>Are you actively hiring?</label>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="auth-form-group">
+                        <label>Password</label>
+                        <input type="password" placeholder="••••••••" required>
+                    </div>
+                </form>
+
+                <div class="auth-actions" style="margin-top: 24px;">
+                    <button class="btn btn-outline" id="btn-back-step2">Back</button>
+                    <button class="btn btn-primary" id="btn-continue-step2">Create Account</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 3: OTP VERIFICATION -->
+        <div id="step-3" class="auth-step hidden">
+            <div class="auth-header text-center">
+                <h2>Verify your <span class="text-gradient">Email</span></h2>
+                <p>We sent a 6-digit code to your email address.</p>
+            </div>
+            
+            <div class="auth-card" style="max-width: 400px; margin: 0 auto;">
+                <div class="otp-container">
+                    <input type="text" class="otp-input" maxlength="1" autofocus>
+                    <input type="text" class="otp-input" maxlength="1">
+                    <input type="text" class="otp-input" maxlength="1">
+                    <input type="text" class="otp-input" maxlength="1">
+                    <input type="text" class="otp-input" maxlength="1">
+                    <input type="text" class="otp-input" maxlength="1">
+                </div>
+                
+                <div class="otp-actions text-center" style="margin-top: 24px;">
+                    <button class="btn btn-primary" style="width: 100%;" id="btn-verify">Verify & Continue</button>
+                    <p style="margin-top: 16px; font-size: 0.9rem; color: var(--text-secondary);">
+                        Didn't receive the code? <a href="#" id="resend-otp">Resend in <span id="otp-timer">30</span>s</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="app.js"></script>
+    <script>
+        // Signup Flow Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const step1 = document.getElementById('step-1');
+            const step2 = document.getElementById('step-2');
+            const step3 = document.getElementById('step-3');
+            
+            const roleCards = document.querySelectorAll('.role-card');
+            const btnContinueStep1 = document.getElementById('btn-continue-step1');
+            const btnBackStep2 = document.getElementById('btn-back-step2');
+            const btnContinueStep2 = document.getElementById('btn-continue-step2');
+            const btnVerify = document.getElementById('btn-verify');
+            
+            const dynamicRoleName = document.getElementById('dynamic-role-name');
+            const roleForms = document.querySelectorAll('.role-form');
+            
+            let selectedRole = null;
+
+            // Step 1: Role Selection
+            roleCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    roleCards.forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    selectedRole = card.getAttribute('data-role');
+                    btnContinueStep1.removeAttribute('disabled');
+                });
+            });
+
+            btnContinueStep1.addEventListener('click', () => {
+                if(!selectedRole) return;
+                
+                // Set text
+                dynamicRoleName.textContent = selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1) + ' Account';
+                
+                // Show correct form
+                roleForms.forEach(f => f.classList.add('hidden'));
+                document.getElementById(`form-${selectedRole}`).classList.remove('hidden');
+                
+                // Transition
+                step1.classList.add('hidden');
+                step2.classList.remove('hidden');
+                step2.style.animation = 'fadeInUp 0.4s ease forwards';
+            });
+
+            // Step 2: Form submission
+            btnBackStep2.addEventListener('click', () => {
+                step2.classList.add('hidden');
+                step1.classList.remove('hidden');
+            });
+
+            btnContinueStep2.addEventListener('click', () => {
+                // In a real app, validate form here
+                step2.classList.add('hidden');
+                step3.classList.remove('hidden');
+                step3.style.animation = 'fadeInUp 0.4s ease forwards';
+                
+                // Start OTP timer
+                startOtpTimer();
+            });
+
+            // Step 3: OTP inputs
+            const otpInputs = document.querySelectorAll('.otp-input');
+            otpInputs.forEach((input, index) => {
+                input.addEventListener('keyup', (e) => {
+                    if (e.key >= '0' && e.key <= '9') {
+                        if (index < otpInputs.length - 1) otpInputs[index + 1].focus();
+                    } else if (e.key === 'Backspace') {
+                        if (index > 0) otpInputs[index - 1].focus();
+                    }
+                });
+            });
+
+            btnVerify.addEventListener('click', () => {
+                // Save role to localStorage for dashboard redirect simulation
+                localStorage.setItem('campusConnectRole', selectedRole);
+                
+                // Redirect to correct dashboard
+                window.location.href = `${selectedRole}-dashboard.html`;
+            });
+
+            // Timer logic
+            function startOtpTimer() {
+                let timeLeft = 30;
+                const timerSpan = document.getElementById('otp-timer');
+                const resendLink = document.getElementById('resend-otp');
+                
+                resendLink.style.pointerEvents = 'none';
+                resendLink.style.color = 'var(--text-muted)';
+                
+                const timer = setInterval(() => {
+                    timeLeft--;
+                    timerSpan.textContent = timeLeft;
+                    
+                    if(timeLeft <= 0) {
+                        clearInterval(timer);
+                        resendLink.innerHTML = "Resend Code";
+                        resendLink.style.pointerEvents = 'auto';
+                        resendLink.style.color = 'var(--primary-blue)';
+                    }
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
