@@ -423,4 +423,98 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
 
+            // --- Terms of Service & Privacy Policy Modals ---
+            const modalContent = {
+                terms: {
+                    title: "Terms of Service",
+                    body: `
+                        <p style="margin-bottom: 12px; font-weight: 500;">Welcome to CampusConnect. By using our platform, you agree to these terms.</p>
+                        <h5 style="color: var(--text-primary); margin: 16px 0 8px 0; font-size: 1rem; font-family: 'Space Grotesk', sans-serif;">1. Eligibility</h5>
+                        <p style="margin-bottom: 12px; font-size: 0.9rem;">You must be a student, alumnus, or verified recruiter affiliated with Punjab Technical University (PTU) or participating campuses to use this service.</p>
+                        <h5 style="color: var(--text-primary); margin: 16px 0 8px 0; font-size: 1rem; font-family: 'Space Grotesk', sans-serif;">2. Account Security</h5>
+                        <p style="margin-bottom: 12px; font-size: 0.9rem;">You are responsible for keeping your login credentials confidential. Any activity on your account is your responsibility.</p>
+                        <h5 style="color: var(--text-primary); margin: 16px 0 8px 0; font-size: 1rem; font-family: 'Space Grotesk', sans-serif;">3. Professional Conduct</h5>
+                        <p style="margin-bottom: 12px; font-size: 0.9rem;">CampusConnect is a professional networking space. Harassment, spamming, posting offensive content, or misrepresentation of credentials will result in immediate suspension.</p>
+                        <h5 style="color: var(--text-primary); margin: 16px 0 8px 0; font-size: 1rem; font-family: 'Space Grotesk', sans-serif;">4. Limitation of Liability</h5>
+                        <p style="margin-bottom: 12px; font-size: 0.9rem;">We provide the platform "as-is". We are not responsible for the accuracy of posts, events, or student credentials.</p>
+                    `
+                },
+                privacy: {
+                    title: "Privacy Policy",
+                    body: `
+                        <p style="margin-bottom: 12px; font-weight: 500;">Your privacy is extremely important to us. Here is how we handle your data:</p>
+                        <h5 style="color: var(--text-primary); margin: 16px 0 8px 0; font-size: 1rem; font-family: 'Space Grotesk', sans-serif;">1. Data Collection</h5>
+                        <p style="margin-bottom: 12px; font-size: 0.9rem;">We collect info you provide during registration (Name, Email, Branch, Year, Bio, etc.) and communication data within DMs.</p>
+                        <h5 style="color: var(--text-primary); margin: 16px 0 8px 0; font-size: 1rem; font-family: 'Space Grotesk', sans-serif;">2. Visibility</h5>
+                        <p style="margin-bottom: 12px; font-size: 0.9rem;">Your profile data is viewable by other authenticated users on the platform. Recruiter profiles are public to allow student applications.</p>
+                        <h5 style="color: var(--text-primary); margin: 16px 0 8px 0; font-size: 1rem; font-family: 'Space Grotesk', sans-serif;">3. Cookies & Storage</h5>
+                        <p style="margin-bottom: 12px; font-size: 0.9rem;">We use local storage (like localStorage) to store your active session state, role, and API configurations (e.g., Gemini API keys).</p>
+                    `
+                },
+                contact: {
+                    title: "Contact Support",
+                    body: `
+                        <p style="margin-bottom: 16px;">Have questions, feedback, or need help? Get in touch with our campus support team:</p>
+                        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 16px; border-radius: 8px; margin-bottom: 16px; font-size: 0.9rem; line-height: 1.6;">
+                            <p style="margin-bottom: 8px;">📧 <b>Email:</b> support@campusconnect.ptu.ac.in</p>
+                            <p style="margin-bottom: 8px;">📍 <b>Office:</b> Innovation & Incubation Center, PTU Main Campus</p>
+                            <p style="margin-bottom: 0;">📞 <b>Phone:</b> +91 1822 282500</p>
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">You can also leave anonymous feedback using the "Leave Feedback" button in the Testimonials section!</p>
+                    `
+                }
+            };
+
+            function injectTermsModal() {
+                if (document.getElementById('terms-privacy-modal')) return;
+                
+                const modalHtml = `
+                    <div class="auth-modal-overlay" id="terms-privacy-modal" style="text-align: left;">
+                        <div class="auth-modal" style="max-width: 500px;">
+                            <button class="close-modal" id="close-terms-btn">&times;</button>
+                            <h3 id="terms-modal-title" style="margin-bottom: 16px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; text-align: center;">Terms of Service</h3>
+                            <div id="terms-modal-body" style="font-size: 0.95rem; color: var(--text-secondary); max-height: 50vh; overflow-y: auto; padding-right: 8px;">
+                                <!-- Content will be injected dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+            }
+
+            function openTermsModal(type) {
+                injectTermsModal();
+                const modal = document.getElementById('terms-privacy-modal');
+                const title = document.getElementById('terms-modal-title');
+                const body = document.getElementById('terms-modal-body');
+                const closeBtn = document.getElementById('close-terms-btn');
+                
+                if (modal && title && body && closeBtn && modalContent[type]) {
+                    title.textContent = modalContent[type].title;
+                    body.innerHTML = modalContent[type].body;
+                    modal.classList.add('open');
+                    
+                    const closeModal = () => modal.classList.remove('open');
+                    closeBtn.onclick = closeModal;
+                    modal.onclick = (e) => {
+                        if (e.target === modal) closeModal();
+                    };
+                }
+            }
+
+            // Delegated click listener for terms, privacy, and contact links
+            document.addEventListener('click', (e) => {
+                const target = e.target;
+                if (target.classList.contains('terms-link')) {
+                    e.preventDefault();
+                    openTermsModal('terms');
+                } else if (target.classList.contains('privacy-link')) {
+                    e.preventDefault();
+                    openTermsModal('privacy');
+                } else if (target.classList.contains('contact-link')) {
+                    e.preventDefault();
+                    openTermsModal('contact');
+                }
+            });
+
         });

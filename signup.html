@@ -148,7 +148,7 @@
                     </div>
                     <div class="auth-form-checkbox">
                         <input type="checkbox" id="terms-student" required>
-                        <label for="terms-student">I agree to the Terms of Service and Privacy Policy</label>
+                        <label for="terms-student">I agree to the <a href="#" class="terms-link">Terms of Service</a> and <a href="#" class="privacy-link">Privacy Policy</a></label>
                     </div>
                 </form>
 
@@ -207,6 +207,10 @@
                         <label>Password</label>
                         <input type="password" placeholder="••••••••" required>
                     </div>
+                    <div class="auth-form-checkbox" style="margin-top: 16px;">
+                        <input type="checkbox" id="terms-alumni" required>
+                        <label for="terms-alumni">I agree to the <a href="#" class="terms-link">Terms of Service</a> and <a href="#" class="privacy-link">Privacy Policy</a></label>
+                    </div>
                 </form>
 
                 <!-- RECRUITER FORM -->
@@ -254,6 +258,10 @@
                     <div class="auth-form-group">
                         <label>Password</label>
                         <input type="password" placeholder="••••••••" required>
+                    </div>
+                    <div class="auth-form-checkbox" style="margin-top: 16px;">
+                        <input type="checkbox" id="terms-recruiter" required>
+                        <label for="terms-recruiter">I agree to the <a href="#" class="terms-link">Terms of Service</a> and <a href="#" class="privacy-link">Privacy Policy</a></label>
                     </div>
                 </form>
 
@@ -400,6 +408,13 @@
                 
                 if (selectedRole === 'student' && formData.password !== formData.confirmPassword) {
                     alert('Passwords do not match.');
+                    return;
+                }
+                
+                // Validate Terms Checkbox
+                const termsCheck = document.getElementById(`terms-${selectedRole}`);
+                if (termsCheck && !termsCheck.checked) {
+                    alert('Please agree to the Terms of Service and Privacy Policy.');
                     return;
                 }
                 

@@ -1621,6 +1621,38 @@
     margin-bottom: 20px;
 }
 
+.auth-form-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.auth-form-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-blue);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.auth-form-checkbox label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    user-select: none;
+}
+
+.auth-form-checkbox label a {
+    color: var(--primary-blue);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.auth-form-checkbox label a:hover {
+    text-decoration: underline;
+}
+
 .switch {
     position: relative;
     display: inline-block;
