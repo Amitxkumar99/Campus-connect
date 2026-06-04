@@ -175,3 +175,23 @@ WHERE NOT EXISTS (SELECT 1 FROM public.feedback WHERE name = 'Arjun Mehta');
 INSERT INTO public.feedback (name, course, branch, semester, category, details, rating)
 SELECT 'Sneha Rao', 'VIT Vellore', '2nd Year', '', 'suggestion', 'I was struggling to find teammates for my hackathon. Within 24 hours of posting on CampusConnect, I had a full team. Absolutely brilliant.', 5
 WHERE NOT EXISTS (SELECT 1 FROM public.feedback WHERE name = 'Sneha Rao');
+
+-- ==========================================
+-- 7. Create Contact Messages Table
+-- ==========================================
+CREATE TABLE IF NOT EXISTS public.contact_messages (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    subject TEXT NOT NULL,
+    message TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Enable RLS
+ALTER TABLE public.contact_messages ENABLE ROW LEVEL SECURITY;
+
+-- Allow anonymous inserts (since anyone can submit contact inquiries)
+DROP POLICY IF EXISTS "Anyone can insert contact messages." ON public.contact_messages;
+CREATE POLICY "Anyone can insert contact messages." ON public.contact_messages FOR INSERT WITH CHECK (true);
+

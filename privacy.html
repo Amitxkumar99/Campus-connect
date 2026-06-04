@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | CampusConnect</title>
+    <meta name="description" content="Privacy Policy for CampusConnect - Punjab Technical University ecosystem.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+</head>
+<body class="dark">
+
+    <!-- === NAVBAR === -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="container">
+            <div class="brand" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                <div class="brand-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="url(#logoGradient)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <defs>
+                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#2563EB" />
+                                <stop offset="100%" stop-color="#7C3AED" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="18" cy="5" r="3"></circle>
+                        <circle cx="6" cy="12" r="3"></circle>
+                        <circle cx="18" cy="19" r="3"></circle>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                    </svg>
+                </div>
+                <span class="brand-text">Campus<span class="text-gradient">Connect</span></span>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="index.html#home" class="nav-link">Home</a></li>
+                <li><a href="index.html#features" class="nav-link">Features</a></li>
+                <li><a href="index.html#how-it-works" class="nav-link">How It Works</a></li>
+                <li><a href="index.html#testimonials" class="nav-link">Testimonials</a></li>
+            </ul>
+            
+            <div class="nav-right">
+                <a href="signup.html" class="btn btn-primary">Get Started</a>
+                <button class="menu-toggle" id="menu-toggle">☰</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+        <div class="mobile-links">
+            <a href="index.html#home">Home</a>
+            <a href="index.html#features">Features</a>
+            <a href="index.html#how-it-works">How It Works</a>
+            <a href="index.html#testimonials">Testimonials</a>
+            <a href="signup.html" class="btn btn-primary" style="text-align: center;">Get Started</a>
+        </div>
+    </div>
+
+    <!-- === LEGAL HERO & CONTENT === -->
+    <section class="hero" style="min-height: auto; padding-top: 140px; padding-bottom: 60px;">
+        <div class="hero-bg">
+            <div class="hero-blob blob-1"></div>
+            <div class="hero-blob blob-2"></div>
+        </div>
+        
+        <div class="container">
+            <div class="section-header fade-up visible" style="margin-bottom: 40px;">
+                <h1>Privacy <span class="text-gradient">Policy</span></h1>
+                <p style="margin-top: 8px;">Last Updated: June 5, 2026</p>
+            </div>
+
+            <div class="fade-up visible" style="max-width: 800px; margin: 0 auto; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 40px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
+                <p style="margin-bottom: 24px; font-size: 1.05rem; color: var(--text-primary);">
+                    At CampusConnect, we are committed to protecting the privacy of our users. This policy outlines how we collect, store, and responsibly handle data within the Punjab Technical University (PTU) ecosystem.
+                </p>
+
+                <h3 style="margin: 28px 0 12px; color: var(--text-primary); font-size: 1.3rem;">1. PTU Ecosystem & Data Visibility</h3>
+                <p style="margin-bottom: 16px; color: var(--text-secondary);">
+                    CampusConnect is designed exclusively for networking and professional collaboration within Punjab Technical University and affiliated colleges. Directory profiles, project listings, and public posts are visible to verified students, alumni, and recruiters inside the ecosystem to facilitate career growth. We do not sell or leak directory search indices to public search engines (like Google or Bing).
+                </p>
+
+                <h3 style="margin: 28px 0 12px; color: var(--text-primary); font-size: 1.3rem;">2. College Email Verification</h3>
+                <p style="margin-bottom: 16px; color: var(--text-secondary);">
+                    To preserve network integrity and prevent unauthorized access, we require college email verification (e.g., student domains affiliated with PTU like `.ptu.ac.in`) during registration. We store this verification status to confirm your affiliation, ensuring that our safe, professional environment remains reserved for authentic members of the campus community.
+                </p>
+
+                <h3 style="margin: 28px 0 12px; color: var(--text-primary); font-size: 1.3rem;">3. User-Generated Content (UGC)</h3>
+                <p style="margin-bottom: 16px; color: var(--text-secondary);">
+                    You retain ownership of the data you post. This includes your profile details, hackathon/project collaboration listings, post updates, and peer-to-peer messages. Messages sent securely between users are encrypted in transit and stored safely in our Supabase database, accessible only by the sender and receiver.
+                </p>
+
+                <h3 style="margin: 28px 0 12px; color: var(--text-primary); font-size: 1.3rem;">4. Responsible Data Handling</h3>
+                <ul style="margin-bottom: 20px; padding-left: 20px; list-style-type: disc; color: var(--text-secondary);">
+                    <li style="margin-bottom: 8px;"><b>No Third-Party Ads:</b> CampusConnect is ad-free. We do not share your profiles or activity history with external marketing networks.</li>
+                    <li style="margin-bottom: 8px;"><b>Local API Keys:</b> If you configure a Gemini API Key to talk with our chatbot assistant, it is saved securely inside your browser's local storage (`localStorage`) and never transmitted to our backend.</li>
+                    <li style="margin-bottom: 8px;"><b>Safe Infrastructure:</b> All structured profile details, ratings, testimonials, and contact submissions are stored securely in Supabase backend systems.</li>
+                </ul>
+
+                <h3 style="margin: 28px 0 12px; color: var(--text-primary); font-size: 1.3rem;">5. Contact Us</h3>
+                <p style="margin-bottom: 0; color: var(--text-secondary);">
+                    If you have questions about this policy, data deletion requests, or our security protocols, please feel free to reach out directly through our <a href="contact.html" style="color: var(--primary-blue); text-decoration: underline;">Contact Page</a> or email us at support@campusconnect.ptu.ac.in.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- === FOOTER === -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="brand footer-brand">
+                        <div class="brand-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="url(#logoGradientFooter)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <defs>
+                                    <linearGradient id="logoGradientFooter" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#2563EB" />
+                                        <stop offset="100%" stop-color="#7C3AED" />
+                                    </linearGradient>
+                                </defs>
+                                <circle cx="18" cy="5" r="3"></circle>
+                                <circle cx="6" cy="12" r="3"></circle>
+                                <circle cx="18" cy="19" r="3"></circle>
+                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                            </svg>
+                        </div>
+                        <span class="brand-text" style="font-weight: 700;">Campus<span class="text-gradient">Connect</span></span>
+                    </div>
+                    <p class="footer-desc">Empowering the next generation of innovators, creators, and leaders to connect and build together.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" aria-label="Twitter">𝕏</a>
+                        <a href="#" class="social-icon" aria-label="LinkedIn">in</a>
+                        <a href="#" class="social-icon" aria-label="Google">G</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4>Platform</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html#features">Features</a></li>
+                        <li><a href="index.html#how-it-works">How It Works</a></li>
+                        <li><a href="index.html#testimonials">Testimonials</a></li>
+                        <li><a href="#">Pricing</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Press Kit</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4>Stay Updated</h4>
+                    <p style="margin-bottom: 16px; font-size: 0.95rem;">Join our newsletter for the latest opportunities.</p>
+                    <form class="newsletter-form" onsubmit="event.preventDefault();">
+                        <input type="email" placeholder="Enter your email" class="newsletter-input" required>
+                        <button type="submit" class="newsletter-btn">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 CampusConnect. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- === JAVASCRIPT === -->
+    <script src="app.js"></script>
+</body>
+</html>
