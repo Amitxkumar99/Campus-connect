@@ -76,13 +76,145 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
 
-                feedbackForm.addEventListener('submit', (e) => {
+                // Star rating interaction
+                const stars = document.querySelectorAll('.star-btn');
+                const ratingInput = document.getElementById('fb-rating');
+                
+                if (stars.length && ratingInput) {
+                    const updateStars = (rating) => {
+                        stars.forEach(star => {
+                            const val = parseInt(star.getAttribute('data-value'));
+                            if (val <= rating) {
+                                star.style.color = '#F59E0B'; // Amber yellow
+                            } else {
+                                star.style.color = 'var(--text-secondary)'; // Default grey
+                            }
+                        });
+                    };
+
+                    // Initialize 5 stars active
+                    updateStars(5);
+
+                    stars.forEach(star => {
+                        star.addEventListener('click', () => {
+                            const val = parseInt(star.getAttribute('data-value'));
+                            ratingInput.value = val;
+                            updateStars(val);
+                        });
+                    });
+                }
+
+                feedbackForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
-                    alert('Thank you! Your feedback helps us build a better CampusConnect.');
-                    feedbackForm.reset();
-                    feedbackModal.classList.remove('open');
+                    
+                    if (!window.db) {
+                        alert("Supabase client not initialized. Please configure credentials in supabase-client.js");
+                        return;
+                    }
+
+                    const name = document.getElementById('fb-name').value.trim();
+                    const course = document.getElementById('fb-course').value.trim();
+                    const branch = document.getElementById('fb-branch').value.trim();
+                    const semester = document.getElementById('fb-sem').value.trim();
+                    const category = document.getElementById('feedback-type').value;
+                    const details = document.getElementById('feedback-text').value.trim();
+                    const rating = parseInt(document.getElementById('fb-rating').value) || 5;
+
+                    const submitBtn = feedbackForm.querySelector('button[type="submit"]');
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Submitting...';
+
+                    try {
+                        const { error } = await window.db
+                            .from('feedback')
+                            .insert({
+                                name,
+                                course,
+                                branch,
+                                semester,
+                                category,
+                                details,
+                                rating
+                            });
+
+                        if (error) throw error;
+
+                        alert('Thank you! Your feedback has been saved in Supabase.');
+                        feedbackForm.reset();
+                        // Reset stars back to 5
+                        if (ratingInput) {
+                            ratingInput.value = 5;
+                            stars.forEach(s => s.style.color = '#F59E0B');
+                        }
+                        feedbackModal.classList.remove('open');
+                        
+                        // Reload testimonials dynamically
+                        loadTestimonials();
+
+                    } catch (err) {
+                        alert('Error submitting feedback: ' + err.message);
+                    } finally {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Submit Feedback';
+                    }
                 });
             }
+
+            // Load dynamic feedbacks in testimonials grid
+            async function loadTestimonials() {
+                const grid = document.querySelector('.testimonials-grid');
+                if (!grid || !window.db) return;
+                
+                try {
+                    const { data: feedbacks, error } = await window.db
+                        .from('feedback')
+                        .select('*')
+                        .order('created_at', { ascending: false })
+                        .limit(6);
+                        
+                    if (error) throw error;
+                    
+                    if (feedbacks && feedbacks.length > 0) {
+                        // Clear existing static testimonials
+                        grid.innerHTML = '';
+                        
+                        feedbacks.forEach((fb, idx) => {
+                            const card = document.createElement('div');
+                            card.className = `testimonial-card fade-up delay-${(idx + 1) * 100} visible`;
+                            
+                            const starsHtml = '★'.repeat(fb.rating || 5) + '☆'.repeat(5 - (fb.rating || 5));
+                            const initials = fb.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U';
+                            
+                            const colors = [
+                                'linear-gradient(135deg, #ec4899, #8b5cf6)',
+                                'linear-gradient(135deg, #3b82f6, #14b8a6)',
+                                'linear-gradient(135deg, #f59e0b, #ea580c)',
+                                'linear-gradient(135deg, #10b981, #059669)',
+                                'linear-gradient(135deg, #8b5cf6, #6366f1)'
+                            ];
+                            const bg = colors[idx % colors.length];
+                            
+                            card.innerHTML = `
+                                <div class="stars" style="color: #F59E0B; margin-bottom: 12px; font-size: 1.1rem;">${starsHtml}</div>
+                                <p class="quote">"${fb.details}"</p>
+                                <div class="author">
+                                    <div class="avatar" style="background: ${bg};">${initials}</div>
+                                    <div class="user-details">
+                                        <h5>${fb.name}</h5>
+                                        <p>${fb.course || ''} ${fb.branch || ''}${fb.semester ? ', ' + fb.semester + ' Sem' : ''}</p>
+                                    </div>
+                                </div>
+                            `;
+                            grid.appendChild(card);
+                        });
+                    }
+                } catch (err) {
+                    console.error("Error loading testimonials:", err);
+                }
+            }
+
+            // Trigger load testimonials after a small delay to let Supabase client load
+            setTimeout(loadTestimonials, 500);
 
             /* --- Active Nav Highlight --- */
             const sections = document.querySelectorAll('section');
@@ -121,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let isFirstMessage = true;
             let chatOpen = false;
 
-            const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE";
+            let GEMINI_API_KEY = localStorage.getItem('GEMINI_API_KEY') || "YOUR_GEMINI_API_KEY_HERE";
             let chatHistory = [];
 
             const botIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>`;
@@ -195,7 +327,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 } catch (error) {
                     console.error("Gemini API Error:", error);
                     chatHistory.pop();
-                    return "Arre yaar, lagta hai network me thoda issue hai. API connect nahi ho rahi. Please try again! 🔌";
+                    if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE") {
+                        return "Arre yaar, Gemini API key configured nahi hai. Chat settings (⚙️ icon upper right) use karke valid API key enter karein! 🔑";
+                    }
+                    return "Arre yaar, lagta hai network me thoda issue hai ya API key invalid hai. Please check your Gemini API key inside settings! 🔌";
                 }
             }
 
@@ -253,5 +388,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 chatWidget.classList.remove('open');
                 chatToggle.style.transform = 'scale(1)';
             });
+
+            // Chat Settings Panel Event Listeners
+            const settingsBtn = document.getElementById('chat-settings-btn');
+            const settingsPanel = document.getElementById('chat-settings-panel');
+            const apiKeyInput = document.getElementById('chat-api-key-input');
+            const saveApiKeyBtn = document.getElementById('save-api-key-btn');
+
+            if (settingsBtn && settingsPanel && apiKeyInput && saveApiKeyBtn) {
+                // Prefill input if key is already saved
+                const savedKey = localStorage.getItem('GEMINI_API_KEY');
+                if (savedKey) {
+                    apiKeyInput.value = savedKey;
+                }
+
+                settingsBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isOpen = settingsPanel.style.display === 'block';
+                    settingsPanel.style.display = isOpen ? 'none' : 'block';
+                });
+
+                saveApiKeyBtn.addEventListener('click', () => {
+                    const key = apiKeyInput.value.trim();
+                    if (key) {
+                        localStorage.setItem('GEMINI_API_KEY', key);
+                        GEMINI_API_KEY = key;
+                        alert('Gemini API key saved successfully!');
+                        settingsPanel.style.display = 'none';
+                    } else {
+                        localStorage.removeItem('GEMINI_API_KEY');
+                        GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE";
+                        alert('API key cleared.');
+                    }
+                });
+            }
 
         });

@@ -343,14 +343,136 @@
                 step1.classList.remove('hidden');
             });
 
-            btnContinueStep2.addEventListener('click', () => {
-                // In a real app, validate form here
-                step2.classList.add('hidden');
-                step3.classList.remove('hidden');
-                step3.style.animation = 'fadeInUp 0.4s ease forwards';
+            function getFormData(role) {
+                if (role === 'student') {
+                    const form = document.getElementById('form-student');
+                    const fullName = form.querySelector('input[placeholder="John Doe"]').value.trim();
+                    const email = form.querySelector('input[type="email"]').value.trim();
+                    const college = form.querySelector('input[placeholder="e.g. PTU"]').value.trim();
+                    const year = form.querySelector('select').value;
+                    const branch = form.querySelector('input[placeholder="e.g. Computer Science"]').value.trim();
+                    const skills = form.querySelector('input[placeholder="Python, React, UI/UX"]').value.trim();
+                    
+                    const passInputs = form.querySelectorAll('input[type="password"]');
+                    const password = passInputs[0].value;
+                    const confirmPassword = passInputs[1].value;
+                    
+                    return { fullName, email, college, year, branch, skills, password, confirmPassword };
+                } else if (role === 'alumni') {
+                    const form = document.getElementById('form-alumni');
+                    const fullName = form.querySelector('input[placeholder="Jane Smith"]').value.trim();
+                    const email = form.querySelector('input[type="email"]').value.trim();
+                    const college = form.querySelector('input[placeholder="e.g. PTU"]').value.trim();
+                    const gradYear = parseInt(form.querySelector('input[placeholder="2022"]').value);
+                    const company = form.querySelector('input[placeholder="e.g. Google"]').value.trim();
+                    const designation = form.querySelector('input[placeholder="Software Engineer"]').value.trim();
+                    const industry = form.querySelector('select').value;
+                    const linkedin = form.querySelector('input[type="url"]').value.trim();
+                    const openToMentoring = form.querySelector('.switch input').checked;
+                    const password = form.querySelector('input[type="password"]').value;
+                    
+                    return { fullName, email, college, gradYear, company, designation, industry, linkedin, openToMentoring, password };
+                } else if (role === 'recruiter') {
+                    const form = document.getElementById('form-recruiter');
+                    const fullName = form.querySelector('input[placeholder="Michael Scott"]').value.trim();
+                    const email = form.querySelector('input[type="email"]').value.trim();
+                    const company = form.querySelector('input[placeholder="Dunder Mifflin"]').value.trim();
+                    const companySize = form.querySelector('select').value;
+                    const industry = form.querySelector('input[placeholder="Paper Distribution"]').value.trim();
+                    const designation = form.querySelector('input[placeholder="Regional Manager"]').value.trim();
+                    const activelyHiring = form.querySelector('.switch input').checked;
+                    const password = form.querySelector('input[type="password"]').value;
+                    
+                    return { fullName, email, company, companySize, industry, designation, activelyHiring, password };
+                }
+            }
+
+            btnContinueStep2.addEventListener('click', async (e) => {
+                e.preventDefault();
                 
-                // Start OTP timer
-                startOtpTimer();
+                const formData = getFormData(selectedRole);
+                
+                // Basic validation
+                if (!formData || !formData.email || !formData.password || !formData.fullName) {
+                    alert('Please fill out all required fields.');
+                    return;
+                }
+                
+                if (selectedRole === 'student' && formData.password !== formData.confirmPassword) {
+                    alert('Passwords do not match.');
+                    return;
+                }
+                
+                btnContinueStep2.disabled = true;
+                btnContinueStep2.textContent = 'Creating Account...';
+                
+                try {
+                    // Prepare user metadata for the trigger to insert into profiles
+                    const userMetadata = {
+                        full_name: formData.fullName,
+                        role: selectedRole
+                    };
+                    
+                    if (selectedRole === 'alumni') {
+                        userMetadata.headline = `${formData.designation} at ${formData.company}`;
+                        userMetadata.graduation_year = formData.gradYear;
+                        userMetadata.bio = `Industry: ${formData.industry}. ${formData.openToMentoring ? 'Open to mentoring.' : ''}`;
+                    } else if (selectedRole === 'student') {
+                        userMetadata.headline = `${formData.branch} student (Year ${formData.year})`;
+                        userMetadata.bio = `Skills: ${formData.skills}`;
+                    } else if (selectedRole === 'recruiter') {
+                        userMetadata.headline = `${formData.designation} at ${formData.company}`;
+                        userMetadata.bio = `Industry: ${formData.industry}. Company Size: ${formData.companySize}. ${formData.activelyHiring ? 'Actively hiring.' : ''}`;
+                    }
+
+                    // 1. Sign up with Supabase Auth (passing metadata)
+                    const { data: authData, error: authError } = await window.db.auth.signUp({
+                        email: formData.email,
+                        password: formData.password,
+                        options: {
+                            data: userMetadata
+                        }
+                    });
+                    
+                    if (authError) throw authError;
+                    
+                    btnContinueStep2.disabled = false;
+                    btnContinueStep2.textContent = 'Create Account';
+                    
+                    // Save role in localStorage
+                    localStorage.setItem('campusConnectRole', selectedRole);
+                    
+                    // If session is active (meaning no email verification required), direct to dashboard
+                    if (authData.session) {
+                        alert('Account created successfully!');
+                        window.location.href = `${selectedRole}-dashboard.html`;
+                    } else {
+                        // Email verification required, show the OTP/verification page
+                        step2.classList.add('hidden');
+                        step3.classList.remove('hidden');
+                        step3.style.animation = 'fadeInUp 0.4s ease forwards';
+                        
+                        // Hide OTP inputs since Supabase uses link verification
+                        const otpContainer = document.querySelector('.otp-container');
+                        if (otpContainer) {
+                            otpContainer.style.display = 'none';
+                        }
+                        
+                        // Customize step 3 details
+                        const step3Header = document.querySelector('#step-3 .auth-header p');
+                        if (step3Header) {
+                            step3Header.innerHTML = `We sent a verification link to <b>${formData.email}</b>.<br>Please click it to activate your account, then click Verify below.`;
+                        }
+                        
+                        // Start OTP timer
+                        startOtpTimer();
+                    }
+                    
+                } catch (err) {
+                    alert('Signup Error: ' + err.message);
+                    btnContinueStep2.disabled = false;
+                    btnContinueStep2.textContent = 'Create Account';
+                }
             });
 
             // Step 3: OTP inputs
@@ -365,12 +487,27 @@
                 });
             });
 
-            btnVerify.addEventListener('click', () => {
-                // Save role to localStorage for dashboard redirect simulation
-                localStorage.setItem('campusConnectRole', selectedRole);
+            btnVerify.addEventListener('click', async () => {
+                btnVerify.disabled = true;
+                btnVerify.textContent = 'Checking activation...';
                 
-                // Redirect to correct dashboard
-                window.location.href = `${selectedRole}-dashboard.html`;
+                try {
+                    const { data, error } = await window.db.auth.getSession();
+                    if (error) throw error;
+                    
+                    if (data.session) {
+                        localStorage.setItem('campusConnectRole', selectedRole);
+                        window.location.href = `${selectedRole}-dashboard.html`;
+                    } else {
+                        alert("We couldn't detect your active session. Please check your email inbox and click the verification link first, then try clicking Verify again.");
+                        btnVerify.disabled = false;
+                        btnVerify.textContent = 'Verify & Continue';
+                    }
+                } catch (err) {
+                    console.error("Auth check failed, using fallback:", err);
+                    localStorage.setItem('campusConnectRole', selectedRole);
+                    window.location.href = `${selectedRole}-dashboard.html`;
+                }
             });
 
             // Timer logic

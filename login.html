@@ -164,18 +164,52 @@
                 }
             });
 
-            loginForm.addEventListener('submit', (e) => {
+            loginForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 
-                // Save role to localStorage to simulate auth state
-                localStorage.setItem('campusConnectRole', detectedRole);
+                const email = emailInput.value.trim();
+                const password = loginForm.querySelector('input[type="password"]').value;
+                const submitBtn = loginForm.querySelector('button[type="submit"]');
                 
-                // Redirect to dashboard
-                window.location.href = `${detectedRole}-dashboard.html`;
+                if (!email || !password) {
+                    alert('Please enter both email and password.');
+                    return;
+                }
+                
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Logging In...';
+                
+                try {
+                    // 1. Authenticate with Supabase Auth
+                    const { data: authData, error: authError } = await window.db.auth.signInWithPassword({
+                        email,
+                        password
+                    });
+                    
+                    if (authError) throw authError;
+                    
+                    // 2. Fetch user's role from profiles table
+                    const { data: profile, error: profileError } = await window.db
+                        .from('profiles')
+                        .select('role')
+                        .eq('id', authData.user.id)
+                        .single();
+                        
+                    let role = detectedRole; // fallback to detected role if profile query fails
+                    if (profile && profile.role) {
+                        role = profile.role;
+                    }
+                    
+                    // 3. Save role to localStorage and redirect
+                    localStorage.setItem('campusConnectRole', role);
+                    window.location.href = `${role}-dashboard.html`;
+                    
+                } catch (err) {
+                    alert('Login Error: ' + err.message);
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Log In';
+                }
             });
-            
-            // Check if we came from signup and prefill role/email logic if needed
-            // For now, it works entirely via the dynamic detection above.
         });
     </script>
 </body>

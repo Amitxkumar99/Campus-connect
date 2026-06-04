@@ -1,15 +1,14 @@
 // CampusConnect Supabase Configuration
-// IMPORTANT: Replace these with your actual Supabase project URL and Anon Key
-const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL = 'https://uckazbtmrdaqrixcqysk.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_yp20AUaWSUoz0ZpgfZg3qw_uwMqKfxJ';
 
 // Initialize the Supabase Client
 // This relies on the Supabase SDK being loaded via CDN in the HTML files
-let supabase;
+let supabaseClient;
 
 try {
     if (typeof window.supabase !== 'undefined') {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         console.log("Supabase Client Initialized successfully.");
     } else {
         console.error("Supabase SDK not found. Make sure the CDN script is included before supabase-client.js");
@@ -20,8 +19,8 @@ try {
 
 // Utility to check if user is authenticated
 async function checkAuthSession() {
-    if (!supabase) return null;
-    const { data, error } = await supabase.auth.getSession();
+    if (!supabaseClient) return null;
+    const { data, error } = await supabaseClient.auth.getSession();
     if (error) {
         console.error("Auth session error:", error);
         return null;
@@ -40,6 +39,6 @@ async function requireAuth() {
 }
 
 // Export supabase object to window for global access
-window.db = supabase;
+window.db = supabaseClient;
 window.checkAuthSession = checkAuthSession;
 window.requireAuth = requireAuth;
